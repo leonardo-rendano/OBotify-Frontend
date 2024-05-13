@@ -8,21 +8,21 @@ interface IMusic {
   id: string;
   title: string;
   author: string;
-  releaseDate: string;
+  releaseDate: Date;
   keywords: string;
 }
 
 export default function Home() {
   const [musicInfo, setMusicInfo] = useState<string>('')
-  const [musicsList, setMusicsList] = useState<IMusic[] | null>([])
+  const [musicsList, setMusicsList] = useState<IMusic[]>([])
 
   async function handleSearchMusic(event: FormEvent) {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      const response = await api.get(`/musics/${musicInfo}`)
-      setMusicsList(response.data)
+      const response = await api.get(`/musics/${musicInfo}`);
+      setMusicsList(response.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -52,7 +52,7 @@ export default function Home() {
             className="mt-8 text-sm p-4 rounded-full w-80 h-10 bg-zinc-800 hover:border"
           />
         </form>
-        <MusicsList musicsList={musicsList} />
+        <MusicsList musicsList={musicsList} setMusicsList={setMusicsList} />
       </main>
     </div>
   );

@@ -3,6 +3,7 @@ import api from "@/apiClient/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useRouter } from 'next/navigation'
 
 const createMusicvalidationSchema = z.object({
   title: z.string().min(1, 'O campo Título é obrigatório.'),
@@ -19,22 +20,22 @@ export default function LibraryPage() {
   const { register, handleSubmit, formState: { errors } } = useForm<CreateMusicvalidationSchema>({
     resolver: zodResolver(createMusicvalidationSchema),
   });
+  const router = useRouter()
 
-  async function handleCreateMusic(data: CreateMusicvalidationSchema) {
+
+  async function handleCreateMusic(newMusic: CreateMusicvalidationSchema) {
     try {
-        await api.post('/musics', data)
+        await api.post('/musics', newMusic)
+        router.push('/')
     } catch (error) {
         console.log(error)
     }
   }
 
-  console.log(errors)
-
   return (
     <main className="flex-1 p-6">
-      <h1 className="font-semibold text-3xl">+ músicas para você escutar.</h1>
-      <h2 className="text-sm m-5">Inclua quantas músicas você quiser.</h2>
-
+      <h1 className="font-semibold text-3xl mb-5">+ músicas para você escutar.</h1>
+    
       <form
         onSubmit={handleSubmit(handleCreateMusic)}
         className="flex flex-col items-right gap-4 p-4 w-[490px]"
